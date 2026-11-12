@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>After the Crash</title>
+  <meta name="description" content="Hospitalised injuries from road crashes in Australia, 2011–2021.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="kicker">Road crash injuries in Australia, 2011 to 2021</p>
+      <h1><span data-stat="hosp">410,884</span> people were admitted to hospital after a road crash in eleven years.</h1>
+      <p class="hero-sub">Deaths get the headlines. The people who survive a crash, often with injuries that keep them in hospital for days or weeks, are a far larger group. This page looks at who they are, how they were travelling, and how that is changing.</p>
+      <dl class="hero-facts">
+        <div><dt>Died in hospital</dt><dd data-stat="died">2,129</dd></div>
+        <div><dt>Survived their admission</dt><dd data-stat="survival">99.5%</dd></div>
+        <div><dt>Days spent in hospital</dt><dd data-stat="bed">2.0 million</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <main>
+    <section class="chapter" id="trend">
+      <h2>Hospitalisations rose 16% in a decade</h2>
+      <p>Admissions climbed from 34,033 in 2011 to a peak of 39,866 in 2019. The 2020 lockdowns cut them by about 5%, but by 2021 they were almost back. Part of the rise reflects population growth: these are counts, not rates per person.</p>
+      <figure class="chart" data-chart="trend" aria-label="Line chart of road crash hospitalisations per year, 2011 to 2021"></figure>
+    </section>
+
+    <section class="chapter" id="who">
+      <h2>Two in three are male, and 40–64 is the largest group</h2>
+      <p>Men account for 65% of hospitalisations, and outnumber women in every age group; only at 75 and over is it close to even. People aged 40–64 make up a third of all cases. The age bands differ in width (40–64 spans 25 years, 17–25 only nine), so a longer bar does not by itself mean a higher personal risk.</p>
+      <div class="toggle" role="group" aria-label="Measure shown in the age and sex chart">
+        <button type="button" data-measure="Count of cases" aria-pressed="true">Hospital cases</button>
+        <button type="button" data-measure="Bed days" aria-pressed="false">Days in hospital</button>
+      </div>
+      <figure class="chart" data-chart="pyramid" aria-label="Population pyramid of hospitalisations by age group, male on the left and female on the right"></figure>
+    </section>
+
+    <section class="chapter" id="deaths">
+      <h2>People over 75 are 6% of cases but 29% of deaths</h2>
+      <p>Almost everyone admitted after a crash survives. The exception is older people: one in forty patients aged 75 and over dies in hospital, compared with about one in three hundred aged 17–64. They also stay longest, close to ten days on average.</p>
+      <figure class="chart" data-chart="shares" aria-label="Dot plot comparing each age group's share of hospital cases with its share of in-hospital deaths"></figure>
+      <p class="note">In-hospital deaths only. Most road deaths happen at the crash scene and never reach hospital. Recorded deaths for 2020 and 2021 look incomplete.</p>
+    </section>
+
+    <section class="chapter" id="road-users">
+      <h2>Pedestrians are rarely hospitalised, but most likely to die</h2>
+      <p>Car drivers are the biggest group by far. Pedestrians make up 7% of cases yet a quarter of in-hospital deaths, and stay in hospital nearly twice as long as the average patient.</p>
+      <figure class="chart" data-chart="bubble" aria-label="Bubble chart of road user groups: hospital cases against percentage who died, bubble size showing average days in hospital"></figure>
+    </section>
+
+    <section class="chapter" id="cycling">
+      <h2>Cycling injuries up 51%, pedestrian injuries down 15%</h2>
+      <p>Each line starts at 100 in 2011, so growth is comparable across groups of very different size. When the 2020 lockdowns arrived, people cycled more and walked less, and the injuries followed.</p>
+      <div class="legend" data-legend="indexLines"></div>
+      <figure class="chart" data-chart="indexLines" aria-label="Line chart of hospitalisations indexed to 2011 for five road user groups"></figure>
+    </section>
+
+    <section class="chapter" id="ageing">
+      <h2>The fastest growth is among older Australians</h2>
+      <p>Hospitalisations of 17–25-year-olds were flat over the decade. Those aged 65–74 rose by more than half. Combined with their higher risk of dying, that points to a growing number of severe cases.</p>
+      <figure class="chart" data-chart="ageChange" aria-label="Bar chart of percentage change in hospitalisations from 2011 to 2021 by age group"></figure>
+    </section>
+
+    <section class="chapter" id="where">
+      <h2>Crashes outside the cities are more severe</h2>
+      <p>Two in three cases come from major cities, but a regional crash puts the patient in hospital for longer and is more likely to end in death.</p>
+      <figure class="chart" data-chart="remoteness" aria-label="Two bar charts by remoteness area: average days in hospital per case, and percentage who died in hospital"></figure>
+    </section>
+
+    <section class="chapter about" id="about">
+      <h2>About this data</h2>
+      <ul>
+        <li>Source: Bureau of Infrastructure and Transport Research Economics (BITRE), Hospitalised injuries from road crashes, 2011–2021 (September 2023 release). Only cases coded as traffic crashes are included.</li>
+        <li>All figures are counts. Groups differ in population size, so a larger count does not mean a higher risk per person.</li>
+        <li>“Died” means died during the hospital admission, not at the crash scene.</li>
+        <li>Hospital cases include people who later died; “hospitalisations” in the headline exclude them, matching BITRE’s published totals.</li>
+      </ul>
+    </section>
+  </main>
+
+  <div class="tooltip" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/lib/d3.v7.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

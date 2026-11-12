@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Road Injury EDA</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="eda_data.js"></script>
+<style>
+  :root {
+    color-scheme: light;
+    --surface: #fcfcfb; --card: #ffffff; --border: #e4e3df;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --grid: #ecebe7;
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --surface: #111110; --card: #1a1a19; --border: #2e2e2b;
+      --text-primary: #f0efec; --text-secondary: #c3c2b7; --grid: #2a2a27;
+      --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+    }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface: #111110; --card: #1a1a19; --border: #2e2e2b;
+  --text-primary: #f0efec; --text-secondary: #c3c2b7; --grid: #2a2a27;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--surface); color: var(--text-primary);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 22px; margin: 0 0 4px; }
+.sub { color: var(--text-secondary); margin: 0 0 20px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr)); gap: 16px; }
+figure { margin: 0; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+figcaption h2 { font-size: 15px; margin: 0 0 2px; }
+figcaption p { margin: 0 0 8px; color: var(--text-secondary); font-size: 13px; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px;
+  background: var(--c); margin-right: 5px; vertical-align: -1px; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+.axis text { fill: var(--text-secondary); font-size: 11px; }
+.axis path, .axis line { stroke: var(--border); }
+.gridline line { stroke: var(--grid); } .gridline path { display: none; }
+.lbl { fill: var(--text-secondary); font-size: 11px; }
+.note { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+#tip { position: fixed; pointer-events: none; background: var(--card); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; font-size: 12px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / .15); opacity: 0; transition: opacity .1s; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Hospitalised injuries from road crashes — Australia, 2011–2021</h1>
+  <p class="sub">Exploratory analysis for Stand Up 1. Source: BITRE, data from the AIHW National Hospital Morbidity Database (2023 release).</p>
+  <div class="grid">
+    <figure id="trend"><figcaption><h2>1. Hospitalisations per year</h2><p>Up 16% over the decade; dip in 2020 (COVID lockdowns).</p></figcaption></figure>
+    <figure id="roaduser"><figcaption><h2>2. By road user</h2><p>Cyclists +51% since 2011 and still rising in 2020; pedestrians falling.</p></figcaption></figure>
+    <figure id="agesex"><figcaption><h2>3. By age group and sex, 2021</h2><p>Males are about two-thirds of cases; 40–64 is the largest group.</p></figcaption></figure>
+    <figure id="states"><figcaption><h2>4. By state or territory, 2021</h2><p>Counts, not rates — population is needed before comparing states.</p></figcaption></figure>
+    <figure id="remote"><figcaption><h2>5. Where people live, by First Nations status, 2021</h2><p>Share of each group's hospitalisations by remoteness area.</p></figcaption></figure>
+  </div>
+</main>
+<div id="tip"></div>
+<script>
+const W = 520, H = 280, M = { t: 10, r: 16, b: 30, l: 52 };
+const fmt = d3.format(",");
+const css = v => `var(${v})`;
+const tip = d3.select("#tip");
+function showTip(e, html) {
+  tip.html(html).style("opacity", 1)
+    .style("left", Math.min(e.clientX + 12, innerWidth - 180) + "px").style("top", (e.clientY + 12) + "px");
+}
+const hideTip = () => tip.style("opacity", 0);
+
+function frame(id, legend) {
+  const fig = d3.select("#" + id);
+  if (legend) fig.append("div").attr("class", "legend").selectAll("span").data(legend).join("span")
+    .attr("style", d => `--c:${css(d[1])}`).text(d => d[0]);
+  return fig.append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("role", "img");
+}
+function yAxis(svg, y) {
+  svg.append("g").attr("class", "axis gridline").attr("transform", `translate(${M.l},0)`)
+    .call(d3.axisLeft(y).ticks(5).tickSize(-(W - M.l - M.r)).tickFormat(d3.format("~s")));
+}
+function xAxis(svg, x, fmtTick) {
+  svg.append("g").attr("class", "axis").attr("transform", `translate(0,${H - M.b})`)
+    .call(d3.axisBottom(x).tickSizeOuter(0).tickFormat(fmtTick));
+}
+
+// Line chart with crosshair tooltip
+function lines(id, series, yZero) {
+  const years = EDA.years;
+  const svg = frame(id, series.length > 1 ? series.map(s => [s.name, s.color]) : null);
+  svg.attr("aria-label", series.map(s => s.name).join(", ") + " by year");
+  const x = d3.scaleLinear([years[0], years.at(-1)], [M.l, W - M.r]);
+  const max = d3.max(series, s => d3.max(s.values));
+  const min = yZero ? 0 : d3.min(series, s => d3.min(s.values)) * 0.95;
+  const y = d3.scaleLinear([min, max * 1.05], [H - M.b, M.t]).nice();
+  yAxis(svg, y); xAxis(svg, x, d3.format("d"));
+  for (const s of series) {
+    svg.append("path").attr("fill", "none").attr("stroke", css(s.color)).attr("stroke-width", 2)
+      .attr("d", d3.line((v, i) => x(years[i]), y)(s.values));
+    svg.append("circle").attr("cx", x(years.at(-1))).attr("cy", y(s.values.at(-1))).attr("r", 4)
+      .attr("fill", css(s.color)).attr("stroke", "var(--card)").attr("stroke-width", 2);
+  }
+  const cross = svg.append("line").attr("stroke", "var(--text-secondary)").attr("stroke-dasharray", "3 3")
+    .attr("y1", M.t).attr("y2", H - M.b).style("opacity", 0);
+  svg.append("rect").attr("x", M.l).attr("y", M.t).attr("width", W - M.l - M.r).attr("height", H - M.t - M.b)
+    .attr("fill", "transparent")
+    .on("mousemove", e => {
+      const i = d3.minIndex(years, yr => Math.abs(x(yr) - d3.pointer(e)[0]));
+      cross.attr("x1", x(years[i])).attr("x2", x(years[i])).style("opacity", 1);
+      showTip(e, `<b>${years[i]}</b><br>` + series.map(s => `${s.name}: ${fmt(s.values[i])}`).join("<br>"));
+    })
+    .on("mouseleave", () => { cross.style("opacity", 0); hideTip(); });
+}
+
+// Grouped (or single) vertical bars
+function bars(id, cats, groups, opts = {}) {
+  const svg = frame(id, groups.length > 1 ? groups.map(g => [g.name, g.color]) : null);
+  svg.attr("aria-label", groups.map(g => g.name).join(" and ") + " by " + cats.join(", "));
+  const x = d3.scaleBand(cats, [M.l, W - M.r]).padding(0.25);
+  const xi = d3.scaleBand(groups.map(g => g.name), [0, x.bandwidth()]).padding(0.08);
+  const y = d3.scaleLinear([0, d3.max(groups, g => d3.max(g.values)) * 1.1], [H - M.b, M.t]).nice();
+  const vfmt = opts.pct ? (v => v + "%") : fmt;
+  yAxis(svg, y); xAxis(svg, x);
+  if (opts.pct) svg.select(".gridline").call(d3.axisLeft(y).ticks(5).tickSize(-(W - M.l - M.r)).tickFormat(d => d + "%"));
+  const r = Math.min(4, xi.bandwidth() / 2);
+  groups.forEach(g => {
+    svg.append("g").selectAll("path").data(cats).join("path")
+      .attr("fill", css(g.color))
+      .attr("d", (c, i) => {  // rounded top, square baseline
+        const x0 = x(c) + xi(g.name), w = xi.bandwidth(), y0 = y(g.values[i]), b = y(0);
+        const rr = Math.min(r, b - y0);
+        return `M${x0},${b}V${y0 + rr}Q${x0},${y0} ${x0 + rr},${y0}H${x0 + w - rr}Q${x0 + w},${y0} ${x0 + w},${y0 + rr}V${b}Z`;
+      })
+      .on("mousemove", (e, c) => showTip(e, `<b>${c}</b><br>${groups.length > 1 ? g.name + ": " : ""}${vfmt(g.values[cats.indexOf(c)])}`))
+      .on("mouseleave", hideTip);
+    if (opts.labels) svg.append("g").selectAll("text").data(cats).join("text").attr("class", "lbl")
+      .attr("text-anchor", "middle").attr("x", c => x(c) + xi(g.name) + xi.bandwidth() / 2)
+      .attr("y", (c, i) => y(g.values[i]) - 4).text((c, i) => vfmt(g.values[i]));
+  });
+}
+
+lines("trend", [{ name: "Hospitalisations", values: EDA.total, color: "--s1" }]);
+
+const ru = EDA.road_user, ruColors = ["--s1", "--s2", "--s3", "--s4", "--s5"];
+lines("roaduser", Object.keys(ru).map((k, i) => ({ name: k, values: ru[k], color: ruColors[i] })), true);
+
+const as = EDA.age_sex_2021;
+bars("agesex", as.ages, [{ name: "Male", values: as.Male, color: "--s1" }, { name: "Female", values: as.Female, color: "--s2" }]);
+
+const st = Object.entries(EDA.states).map(([k, v]) => [k, v.at(-1)]).sort((a, b) => b[1] - a[1]);
+bars("states", st.map(d => d[0]), [{ name: "2021", values: st.map(d => d[1]), color: "--s1" }], { labels: true });
+d3.select("#states").append("p").attr("class", "note").text("Series breaks: NSW from June 2017 and Vic from 2012 are not comparable with earlier years.");
+
+const rm = EDA.remoteness_2021;
+bars("remote", rm.areas, [
+  { name: "First Nations peoples", values: rm["First Nations peoples"], color: "--s1" },
+  { name: "Non-Indigenous Australians", values: rm["Non-Indigenous Australians"], color: "--s2" }], { pct: true, labels: true });
+</script>
+</body>
+</html>

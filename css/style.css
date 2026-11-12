@@ -1,0 +1,122 @@
+:root {
+  --paper: #f6f7f5;      /* cool off-white page */
+  --surface: #fcfcfb;    /* chart surface */
+  --asphalt: #23272b;    /* hero */
+  --lane: #f2c230;       /* road-marking yellow, decorative only */
+  --ink: #1f2326;
+  --ink-2: #565d63;
+  --muted: #7a8188;
+  --grid: #e1e4e6;
+  --context: #a3a9ae;    /* de-emphasised marks */
+  --death: #c62f3a;      /* deaths / the point of each chart */
+  --male: #2a78d6;
+  --female: #eb6834;
+  --ru-1: #1baf7a; --ru-2: #eda100; --ru-3: #e87ba4; --ru-4: #008300; --ru-5: #6250d6;
+
+  --sans: "Overpass", "Helvetica Neue", Arial, sans-serif;  /* road-sign lettering */
+  --serif: "Source Serif 4", Georgia, serif;
+  --text-col: 40rem;
+  --chart-col: 60rem;
+  --road-x: max(1rem, calc(50% - var(--chart-col) / 2 - 2.5rem));
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.125rem/1.65 var(--serif);
+}
+
+/* Hero: the road surface, with the centre line running down into the page */
+.hero {
+  background: var(--asphalt);
+  color: #f3f4f2;
+  padding: clamp(3rem, 10vw, 7rem) 1rem clamp(3rem, 8vw, 5rem);
+  position: relative;
+}
+.hero-inner { max-width: var(--chart-col); margin: 0 auto; }
+.kicker { font: 600 1rem/1.4 var(--sans); color: var(--lane); margin: 0 0 1.5rem; }
+.hero h1 {
+  font: 800 clamp(2.1rem, 6vw, 4.25rem)/1.05 var(--sans);
+  letter-spacing: -0.02em;
+  margin: 0 0 1.75rem;
+  max-width: 18ch;
+}
+.hero h1 [data-stat] { color: var(--lane); font-variant-numeric: tabular-nums; }
+.hero-sub { max-width: var(--text-col); color: #c9cdd0; margin: 0 0 2.5rem; }
+.hero-facts {
+  display: flex; flex-wrap: wrap; gap: 1.25rem 3rem; margin: 0;
+}
+.hero-facts dt { font: 400 0.95rem/1.3 var(--sans); color: #aab0b5; }
+.hero-facts dd { font: 800 2rem/1.2 var(--sans); margin: 0.2rem 0 0; }
+
+/* The centre line: a dashed lane marking linking the chapters in order */
+main { position: relative; padding: 1rem 1rem 4rem; }
+@media (min-width: 70rem) {
+  main::before {
+    content: ""; position: absolute; top: 0; bottom: 0; left: var(--road-x); width: 4px;
+    background: repeating-linear-gradient(to bottom, var(--lane) 0 28px, transparent 28px 56px);
+    opacity: 0.85;
+  }
+  .chapter h2::before {
+    content: ""; position: absolute; left: calc(var(--road-x) - 5px); width: 14px; height: 14px;
+    margin-top: 0.55em; border-radius: 50%; background: var(--asphalt); box-shadow: 0 0 0 3px var(--paper);
+  }
+}
+
+.chapter { max-width: var(--chart-col); margin: 0 auto; padding: 4.5rem 0 1rem; }
+.chapter > h2, .chapter > p, .chapter > ul, .toggle, .legend { max-width: var(--text-col); }
+.chapter h2 {
+  font: 800 clamp(1.6rem, 3.6vw, 2.25rem)/1.15 var(--sans);
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem;
+}
+.chapter p { margin: 0 0 1.25rem; }
+.note { font-size: 0.95rem; color: var(--ink-2); }
+.about ul { padding-left: 1.2rem; color: var(--ink-2); font-size: 1rem; }
+.about li { margin-bottom: 0.5rem; }
+
+/* Charts */
+.chart { margin: 1.5rem 0 1rem; background: var(--surface); border-radius: 6px; padding: 1rem 0.5rem 0.5rem; min-height: 120px; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; font-family: var(--sans); }
+.chart .axis text, .chart .tick text { fill: var(--muted); font-size: 13px; }
+.chart .axis path, .chart .axis line { stroke: var(--grid); }
+.chart .grid line { stroke: var(--grid); }
+.chart .label { fill: var(--ink); font-size: 14px; }
+.chart .label-2 { fill: var(--ink-2); font-size: 13px; }
+.chart .label-strong { fill: var(--ink); font-size: 14px; font-weight: 600; }
+.chart .error { color: var(--death); font: 600 1rem var(--sans); padding: 1rem; }
+
+/* Controls */
+.toggle, .legend { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; }
+.toggle button, .legend button {
+  font: 600 0.95rem/1 var(--sans);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--grid);
+  border-radius: 999px;
+  padding: 0.6rem 1rem 0.5rem;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.toggle button[aria-pressed="true"] { background: var(--asphalt); color: #fff; border-color: var(--asphalt); }
+.legend button[aria-pressed="false"] { color: var(--muted); }
+.legend button[aria-pressed="false"] .swatch { opacity: 0.3; }
+.swatch { width: 14px; height: 4px; border-radius: 2px; display: inline-block; }
+button:focus-visible { outline: 3px solid var(--male); outline-offset: 2px; }
+
+/* Tooltip */
+.tooltip {
+  position: fixed; z-index: 10; pointer-events: none;
+  background: var(--asphalt); color: #f3f4f2;
+  font: 400 0.9rem/1.45 var(--sans);
+  padding: 0.6rem 0.8rem 0.5rem; border-radius: 6px;
+  max-width: 260px;
+}
+.tooltip strong { font-weight: 600; display: block; margin-bottom: 0.15rem; }
+.tooltip .row { display: flex; justify-content: space-between; gap: 1rem; }
+.tooltip .key { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 0.4rem; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
