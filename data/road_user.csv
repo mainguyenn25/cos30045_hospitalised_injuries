@@ -1,13 +1,13 @@
-Road user,Count of cases,Died_cases,Hospitalisations,Bed days
-Bus occupant,2602,18,2584,13061
-Car driver,135733,670,135063,615717
-Car passenger,53577,336,53241,255987
-Car unknown position,8880,44,8836,57072
-Heavy transport driver,4630,16,4614,27056
-Heavy transport passenger,554,1,553,3154
-Heavy transport unknown position,447,3,444,2996
-Motorcyclist,92642,320,92322,504102
-Other or unknown,6367,21,6346,37610
-Pedal cyclist,75486,124,75362,222501
-Pedestrian,29093,561,28532,262180
-Pick-up truck or van occupant,3002,15,2987,17455
+"Road user","Count of cases","Died_cases","Hospitalisations","Bed days"
+"Bus occupant",2602,18,2584,13061
+"Car driver",135733,670,135063,615717
+"Car passenger",53577,336,53241,255987
+"Car unknown position",8880,44,8836,57072
+"Heavy transport driver",4630,16,4614,27056
+"Heavy transport passenger",554,1,553,3154
+"Heavy transport unknown position",447,3,444,2996
+"Motorcyclist",92642,320,92322,504102
+"Other or unknown",6367,21,6346,37610
+"Pedal cyclist",75486,124,75362,222501
+"Pedestrian",29093,561,28532,262180
+"Pick-up truck or van occupant",3002,15,2987,17455
