@@ -6,7 +6,7 @@ export function draw(el, data) {
   const { g, w, h } = frame(el, 400, m);
   const rows = data.filter(d => ROAD_USERS.includes(d['Road user'])).map(d => ({
     name: d['Road user'], cases: d['Count of cases'], deaths: d['Died_cases'],
-    fatal: (100 * d['Died_cases']) / d['Count of cases'], days: d['Bed days'] / d['Count of cases'],
+    fatal: d['Died %'], days: d['Bed days'] / d['Count of cases'], // Died % comes from KNIME
   }));
   const grey = css('--context'), red = css('--death'), surface = css('--surface');
 

@@ -10,7 +10,7 @@ export function draw(el, data) {
   const { g, w } = frame(el, stacked ? 2 * (panelH + titleH) + 24 : panelH + titleH, m);
   const rows = AREAS.map(a => data.find(d => d['ABS remoteness area'] === a)).filter(Boolean).map(d => ({
     area: d['ABS remoteness area'], cases: d['Count of cases'], deaths: d['Died_cases'],
-    days: d['Bed days'] / d['Count of cases'], fatal: (100 * d['Died_cases']) / d['Count of cases'],
+    days: d['Days per case'], fatal: d['Died %'], // both computed in KNIME
   }));
   const panels = [
     { key: 'days', title: 'Average days in hospital', fmt: v => v.toFixed(1), color: css('--asphalt') },
