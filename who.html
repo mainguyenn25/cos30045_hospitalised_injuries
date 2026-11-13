@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Who gets hurt · After the Crash</title>
+  <meta name="description" content="Age and sex of people hospitalised after road crashes in Australia, and who is most likely to die.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter+Tight:wght@400;600;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%2323272b%27/%3E%3Cpath d=%27M16 4v6M16 13v6M16 22v6%27 stroke=%27%23f2c230%27 stroke-width=%273%27 stroke-linecap=%27round%27/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="top plain">
+    <header class="site-header">
+      <a class="logo" href="index.html">After the Crash</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><span aria-hidden="true">+</span></button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="trends.html">Trends</a>
+        <a href="who.html" aria-current="page">Who</a>
+        <a href="how-where.html">How &amp; where</a>
+        <a href="download.html">Data Download</a>
+      </nav>
+    </header>
+    <section class="page-hero">
+      <h1>Who gets hurt</h1>
+      <p>The age and sex of the people admitted to hospital after a road crash, and who is most likely to die there.</p>
+    </section>
+  </div>
+
+  <main class="story">
+    <section class="chapter" id="who">
+      <h2>Two in three are male, and 40–64 is the largest group</h2>
+      <p>Men account for 65% of hospitalisations, and outnumber women in every age group; only at 75 and over is it close to even. People aged 40–64 make up a third of all cases. The age bands differ in width (40–64 spans 25 years, 17–25 only nine), so a longer bar does not by itself mean a higher personal risk.</p>
+      <div class="toggle" role="group" aria-label="Measure shown in the age and sex chart">
+        <button type="button" data-measure="Count of cases" aria-pressed="true">Hospital cases</button>
+        <button type="button" data-measure="Bed days" aria-pressed="false">Days in hospital</button>
+      </div>
+      <figure class="chart" data-chart="pyramid" aria-label="Population pyramid of hospitalisations by age group, male on the left and female on the right"></figure>
+    </section>
+
+    <section class="chapter" id="deaths">
+      <h2>People over 75 are 6% of cases but 29% of deaths</h2>
+      <p>Almost everyone admitted after a crash survives. The exception is older people: one in forty patients aged 75 and over dies in hospital, compared with about one in three hundred aged 17–64. They also stay longest, close to ten days on average.</p>
+      <figure class="chart" data-chart="shares" aria-label="Dot plot comparing each age group's share of hospital cases with its share of in-hospital deaths"></figure>
+      <p class="note">In-hospital deaths only. Most road deaths happen at the crash scene and never reach hospital. Recorded deaths for 2020 and 2021 look incomplete.</p>
+    </section>
+
+    <div class="chapter next"><a class="btn" href="how-where.html">Next: How and where</a></div>
+  </main>
+
+  <footer class="site-footer"><p>© 2026 · COS30045 Data Visualisation · Data: BITRE</p></footer>
+  <div class="tooltip" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/lib/d3.v7.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

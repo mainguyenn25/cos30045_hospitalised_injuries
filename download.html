@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Download · After the Crash</title>
+  <meta name="description" content="Download the CSV files behind every chart, and the original BITRE source workbooks.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter+Tight:wght@400;600;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%2323272b%27/%3E%3Cpath d=%27M16 4v6M16 13v6M16 22v6%27 stroke=%27%23f2c230%27 stroke-width=%273%27 stroke-linecap=%27round%27/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="top plain">
+    <header class="site-header">
+      <a class="logo" href="index.html">After the Crash</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><span aria-hidden="true">+</span></button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="trends.html">Trends</a>
+        <a href="who.html">Who</a>
+        <a href="how-where.html">How &amp; where</a>
+        <a href="download.html" aria-current="page">Data Download</a>
+      </nav>
+    </header>
+    <section class="page-hero">
+      <h1>Data Download</h1>
+      <p>Every chart on this site reads one of these CSV files. Each was produced by our KNIME workflow from the BITRE source data, filtered to traffic crashes.</p>
+    </section>
+  </div>
+
+  <main>
+    <section class="chapter">
+      <h2>Chart data</h2>
+      <div class="table-wrap">
+        <table class="files">
+          <thead><tr><th>File</th><th>What it holds</th><th>Used on</th><th>Rows</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><code>by_year.csv</code></td><td>Cases, deaths, hospitalisations and bed days per year</td><td>Home, Trends</td><td>11</td><td><a href="data/by_year.csv" download>Download</a></td></tr>
+            <tr><td><code>year_road_user.csv</code></td><td>Hospitalisations per year for each road user group</td><td>Trends</td><td>132</td><td><a href="data/year_road_user.csv" download>Download</a></td></tr>
+            <tr><td><code>year_age.csv</code></td><td>Hospitalisations per year for each age group</td><td>Trends</td><td>78</td><td><a href="data/year_age.csv" download>Download</a></td></tr>
+            <tr><td><code>age_sex.csv</code></td><td>Cases, deaths and bed days by age group, female and male</td><td>Who</td><td>7</td><td><a href="data/age_sex.csv" download>Download</a></td></tr>
+            <tr><td><code>road_user.csv</code></td><td>Cases, deaths, bed days and death rate per road user group</td><td>How &amp; where</td><td>12</td><td><a href="data/road_user.csv" download>Download</a></td></tr>
+            <tr><td><code>road_user_counterparty.csv</code></td><td>What each road user collided with, as a share of cases and deaths</td><td>How &amp; where</td><td>18</td><td><a href="data/road_user_counterparty.csv" download>Download</a></td></tr>
+            <tr><td><code>remoteness.csv</code></td><td>Cases, deaths, days per case and death rate by remoteness area</td><td>How &amp; where</td><td>4</td><td><a href="data/remoteness.csv" download>Download</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <h2>Source workbooks</h2>
+      <p>Bureau of Infrastructure and Transport Research Economics (BITRE), <em>Hospitalised injuries from road crashes</em>, 2011–2021 (September 2023 release).</p>
+      <ul>
+        <li><a href="source-data/hospitalisation_injury_publication_sep2023.xlsx" download>National publication workbook</a></li>
+        <li><a href="source-data/state-and-territory-hospitalisation-injury-publication-2023.xlsx" download>State and territory workbook</a></li>
+        <li><a href="source-data/First-Nations-hospitalised-injuries-2023.xlsx" download>First Nations workbook</a></li>
+      </ul>
+    </section>
+
+    <section class="chapter about" id="about">
+      <h2>About this data</h2>
+      <ul>
+        <li>Only cases coded as traffic crashes are included.</li>
+        <li>All figures are counts. Groups differ in population size, so a larger count does not mean a higher risk per person.</li>
+        <li>“Died” means died during the hospital admission, not at the crash scene.</li>
+        <li>Hospital cases include people who later died; “hospitalisations” in the headline exclude them, matching BITRE’s published totals.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer"><p>© 2026 · COS30045 Data Visualisation · Data: BITRE</p></footer>
+
+  <script src="js/lib/d3.v7.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

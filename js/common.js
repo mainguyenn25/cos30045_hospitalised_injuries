@@ -6,6 +6,8 @@ export const ROAD_USERS = ['Car driver', 'Car passenger', 'Motorcyclist', 'Pedal
 
 export const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 export const fmt = d3.format(',');
+// Animation length, or 0 when the viewer asks for reduced motion.
+export const ms = t => (matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : t);
 export const pct = (v, digits = 1) => `${v.toFixed(digits)}%`;
 
 // Responsive SVG sized to the container's current width (main.js redraws on resize).
@@ -31,16 +33,22 @@ export function hbar(x0, x1, y, h, r = 4) {
 
 // One tooltip for the page. html is trusted (built from our own CSV values).
 const tip = document.querySelector('.tooltip');
+if (tip) tip.hidden = false; // shown and hidden with the .show class so it can fade
+let hideTimer;
 export function showTip(event, html) {
   tip.innerHTML = html;
-  tip.hidden = false;
+  clearTimeout(hideTimer); // moving to the next mark cancels the hide, so no flicker
   const pad = 14, r = tip.getBoundingClientRect();
   let x = event.clientX + pad, y = event.clientY + pad;
   if (x + r.width > innerWidth - 8) x = event.clientX - r.width - pad;
   if (y + r.height > innerHeight - 8) y = event.clientY - r.height - pad;
   tip.style.left = `${Math.max(8, x)}px`;
   tip.style.top = `${Math.max(8, y)}px`;
+  tip.classList.add('show'); // fades in only if it was hidden
 }
-export const hideTip = () => { tip.hidden = true; };
+export const hideTip = () => {
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(() => tip.classList.remove('show'), 100);
+};
 export const row = (label, value, color) =>
   `<div class="row"><span>${color ? `<i class="key" style="background:${color}"></i>` : ''}${label}</span><b>${value}</b></div>`;

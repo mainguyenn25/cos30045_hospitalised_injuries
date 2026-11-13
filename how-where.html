@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How and where · After the Crash</title>
+  <meta name="description" content="Road users, what they collided with, and city versus regional road crash hospitalisations in Australia.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter+Tight:wght@400;600;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%2323272b%27/%3E%3Cpath d=%27M16 4v6M16 13v6M16 22v6%27 stroke=%27%23f2c230%27 stroke-width=%273%27 stroke-linecap=%27round%27/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="top plain">
+    <header class="site-header">
+      <a class="logo" href="index.html">After the Crash</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><span aria-hidden="true">+</span></button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="trends.html">Trends</a>
+        <a href="who.html">Who</a>
+        <a href="how-where.html" aria-current="page">How &amp; where</a>
+        <a href="download.html">Data Download</a>
+      </nav>
+    </header>
+    <section class="page-hero">
+      <h1>How and where</h1>
+      <p>How people were travelling, what they collided with, and whether the crash happened in a city or out in the regions.</p>
+    </section>
+  </div>
+
+  <main class="story">
+    <section class="chapter" id="road-users">
+      <h2>Pedestrians are rarely hospitalised, but most likely to die</h2>
+      <p>Car drivers are the biggest group by far. Pedestrians make up 7% of cases yet a quarter of in-hospital deaths, and stay in hospital nearly twice as long as the average patient.</p>
+      <figure class="chart" data-chart="bubble" aria-label="Bubble chart of road user groups: hospital cases against percentage who died, bubble size showing average days in hospital"></figure>
+    </section>
+
+    <section class="chapter" id="what-they-hit">
+      <h2>Hit by a car, cyclists are far more likely to die</h2>
+      <p>Most cyclists and motorcyclists are hurt in crashes that involve no one else. But when a cyclist is hit by a car or van, the stakes change: those crashes are 21% of cyclist injuries and half of cyclist deaths. For drivers, hitting a fixed object such as a tree or pole is the deadliest crash type.</p>
+      <figure class="chart" data-chart="hit" aria-label="Stacked bars for car drivers, motorcyclists, pedal cyclists and pedestrians, comparing what they hit in injury cases with what they hit in deaths"></figure>
+    </section>
+
+    <section class="chapter" id="where">
+      <h2>Crashes outside the cities are more severe</h2>
+      <p>Two in three cases come from major cities, but a regional crash puts the patient in hospital for longer and is more likely to end in death.</p>
+      <figure class="chart" data-chart="remoteness" aria-label="Two bar charts by remoteness area: average days in hospital per case, and percentage who died in hospital"></figure>
+    </section>
+
+    <div class="chapter next"><a class="btn" href="download.html">Next: Download the data</a></div>
+  </main>
+
+  <footer class="site-footer"><p>© 2026 · COS30045 Data Visualisation · Data: BITRE</p></footer>
+  <div class="tooltip" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/lib/d3.v7.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

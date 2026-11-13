@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trends over time · After the Crash</title>
+  <meta name="description" content="Road crash hospitalisations in Australia, 2011–2021: the yearly trend, road users and age groups.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter+Tight:wght@400;600;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%2323272b%27/%3E%3Cpath d=%27M16 4v6M16 13v6M16 22v6%27 stroke=%27%23f2c230%27 stroke-width=%273%27 stroke-linecap=%27round%27/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="top plain">
+    <header class="site-header">
+      <a class="logo" href="index.html">After the Crash</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><span aria-hidden="true">+</span></button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="trends.html" aria-current="page">Trends</a>
+        <a href="who.html">Who</a>
+        <a href="how-where.html">How &amp; where</a>
+        <a href="download.html">Data Download</a>
+      </nav>
+    </header>
+    <section class="page-hero">
+      <h1>Trends over time</h1>
+      <p>How road crash hospitalisations changed between 2011 and 2021, and which groups drove the change.</p>
+    </section>
+  </div>
+
+  <main class="story">
+    <section class="chapter" id="trend">
+      <h2>Hospitalisations rose 16% in a decade</h2>
+      <p>Admissions climbed from 34,033 in 2011 to a peak of 39,866 in 2019. The 2020 lockdowns cut them by about 5%, but by 2021 they were almost back. Part of the rise reflects population growth: these are counts, not rates per person.</p>
+      <figure class="chart" data-chart="trend" aria-label="Line chart of road crash hospitalisations per year, 2011 to 2021"></figure>
+    </section>
+
+    <section class="chapter" id="cycling">
+      <h2>Cycling injuries up 51%, pedestrian injuries down 15%</h2>
+      <p>Each line starts at 100 in 2011, so growth is comparable across groups of very different size. When the 2020 lockdowns arrived, people cycled more and walked less, and the injuries followed.</p>
+      <div class="legend" data-legend="indexLines"></div>
+      <figure class="chart" data-chart="indexLines" aria-label="Line chart of hospitalisations indexed to 2011 for five road user groups"></figure>
+    </section>
+
+    <section class="chapter" id="ageing">
+      <h2>The fastest growth is among older Australians</h2>
+      <p>Hospitalisations of 17–25-year-olds were flat over the decade. Those aged 65–74 rose by more than half. Combined with their higher risk of dying, that points to a growing number of severe cases.</p>
+      <figure class="chart" data-chart="ageChange" aria-label="Bar chart of percentage change in hospitalisations from 2011 to 2021 by age group"></figure>
+    </section>
+
+    <div class="chapter next"><a class="btn" href="who.html">Next: Who gets hurt</a></div>
+  </main>
+
+  <footer class="site-footer"><p>© 2026 · COS30045 Data Visualisation · Data: BITRE</p></footer>
+  <div class="tooltip" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/lib/d3.v7.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

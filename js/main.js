@@ -6,6 +6,7 @@ import { draw as bubble } from './charts/bubble.js';
 import { draw as indexLines } from './charts/indexLines.js';
 import { draw as ageChange } from './charts/ageChange.js';
 import { draw as remoteness } from './charts/remoteness.js';
+import { draw as hit } from './charts/hit.js';
 
 // chart name (data-chart attribute) -> [draw function, CSV file produced by KNIME]
 const CHARTS = {
@@ -16,6 +17,7 @@ const CHARTS = {
   indexLines: [indexLines, 'year_road_user.csv'],
   ageChange: [ageChange, 'year_age.csv'],
   remoteness: [remoteness, 'remoteness.csv'],
+  hit: [hit, 'road_user_counterparty.csv'],
 };
 
 const cache = new Map();
@@ -42,10 +44,16 @@ for (const el of document.querySelectorAll('[data-chart]')) {
   }).catch(err => fail(el, file, err));
 }
 
-// Hero figures come from the same yearly file as the trend chart.
-load('by_year.csv').then(rows => {
+// Mobile menu: the "+" button opens the nav
+const header = document.querySelector('.site-header');
+header.querySelector('.menu-btn').addEventListener('click', e => {
+  e.currentTarget.setAttribute('aria-expanded', header.classList.toggle('open'));
+});
+
+// Hero figures (home page only) come from the same yearly file as the trend chart.
+if (document.querySelector('[data-stat]')) load('by_year.csv').then(rows => {
   const sum = k => d3.sum(rows, d => d[k]);
-  const set = (k, v) => { document.querySelector(`[data-stat="${k}"]`).textContent = v; };
+  const set = (k, v) => { const el = document.querySelector(`[data-stat="${k}"]`); if (el) el.textContent = v; };
   set('hosp', fmt(sum('Hospitalisations')));
   set('died', fmt(sum('Died_cases')));
   set('survival', `${(100 - (100 * sum('Died_cases')) / sum('Count of cases')).toFixed(1)}%`);

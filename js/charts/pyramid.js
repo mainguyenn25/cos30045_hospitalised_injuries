@@ -1,5 +1,5 @@
 // Section 2: age x sex pyramid (age_sex.csv, the KNIME Pivot output). Measure set by the toggle in main.js.
-import { d3, css, fmt, frame, hbar, showTip, hideTip, row, AGES } from '../common.js';
+import { d3, css, fmt, frame, hbar, showTip, hideTip, row, ms, AGES } from '../common.js';
 
 export function draw(el, data) {
   const measure = el.dataset.measure || 'Count of cases';
@@ -18,6 +18,11 @@ export function draw(el, data) {
     { s: 'Male', base: half, dir: -1, color: css('--male') },
     { s: 'Female', base: half + gap, dir: 1, color: css('--female') },
   ];
+  // Animate only when the measure toggle changed (not on resize): bars grow from their previous length
+  const animate = el._measure && el._measure !== measure;
+  const prev = el._len || {};
+  el._measure = measure;
+  el._len = {};
   const short = v => (v >= 1e4 ? `${Math.round(v / 1000)}K` : fmt(v));
 
   for (const { s, base, dir, color } of sides) {
@@ -26,13 +31,19 @@ export function draw(el, data) {
     g.append('text').attr('class', 'label-strong').attr('x', dir < 0 ? base - 44 : base + 20).attr('y', -24).text(s);
 
     const bars = g.append('g').selectAll('g').data(rows).join('g');
-    bars.append('path').attr('fill', color)
-      .attr('d', d => hbar(base, base + dir * len(val(d, s)), y(d['Age group']) + (y.bandwidth() - bh) / 2, bh));
+    const yy = d => y(d['Age group']) + (y.bandwidth() - bh) / 2;
+    const path = (d, l) => hbar(base, base + dir * Math.max(l, 0.5), yy(d), bh); // 0.5px keeps the path shape constant for tweening
+    const labelX = l => base + dir * (l + 6);
+    bars.each(d => { el._len[s + d['Age group']] = len(val(d, s)); });
+    const from = d => (animate ? prev[s + d['Age group']] ?? 0 : len(val(d, s)));
+    bars.append('path').attr('fill', color).attr('d', d => path(d, from(d)))
+      .transition().duration(ms(animate ? 500 : 0)).ease(d3.easeCubicOut).attr('d', d => path(d, len(val(d, s))));
     bars.append('text').attr('class', 'label-2')
-      .attr('x', d => base + dir * (len(val(d, s)) + 6))
+      .attr('x', d => labelX(from(d)))
       .attr('y', d => y(d['Age group']) + y.bandwidth() / 2 + 5)
       .attr('text-anchor', dir < 0 ? 'end' : 'start')
-      .text(d => short(val(d, s)));
+      .text(d => short(val(d, s)))
+      .transition().duration(ms(animate ? 500 : 0)).ease(d3.easeCubicOut).attr('x', d => labelX(len(val(d, s))));
   }
 
   // Age labels in the centre gap, plus a full-width hover target per row

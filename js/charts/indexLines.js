@@ -1,7 +1,7 @@
 // Section 5: hospitalisations indexed to 2011 = 100 for five road users (year_road_user.csv, long format)
-import { d3, css, fmt, frame, showTip, hideTip, row, ROAD_USERS } from '../common.js';
+import { d3, css, fmt, frame, showTip, hideTip, row, ms, ROAD_USERS } from '../common.js';
 
-let focus = null; // road user picked in the legend, null = all
+const picked = new Set(); // road users picked in the legend; empty = show all
 
 export function draw(el, data) {
   const narrow = el.clientWidth < 560;
@@ -26,7 +26,8 @@ export function draw(el, data) {
   g.append('line').attr('x1', x(2020)).attr('x2', x(2020)).attr('y1', 0).attr('y2', h).attr('stroke', css('--context'));
   g.append('text').attr('class', 'label-2').attr('x', x(2020) - 6).attr('y', 14).attr('text-anchor', 'end').text('2020');
 
-  const op = u => (!focus || focus === u ? 1 : 0.15);
+  const on = u => !picked.size || picked.has(u);
+  const op = u => (on(u) ? 1 : 0.15);
   const line = d3.line().x(p => x(p.year)).y(p => y(p.idx));
   const s = g.append('g').selectAll('g').data(series).join('g').attr('opacity', d => op(d.u));
   s.append('path').attr('fill', 'none').attr('stroke', d => color[d.u]).attr('stroke-width', 2)
@@ -49,14 +50,27 @@ export function draw(el, data) {
     })
     .on('pointerleave', () => { hair.style('display', 'none'); hideTip(); });
 
-  // Legend buttons: click one to highlight it, click again to show all
+  // Legend: pick any number of lines to compare; Reset goes back to all
   const legend = document.querySelector('[data-legend="indexLines"]');
-  legend.replaceChildren(...ROAD_USERS.map(u => {
+  const reset = document.createElement('button');
+  reset.type = 'button';
+  reset.className = 'reset';
+  reset.textContent = 'Reset';
+  const buttons = ROAD_USERS.map(u => {
     const b = document.createElement('button');
     b.type = 'button';
-    b.setAttribute('aria-pressed', !focus || focus === u);
     b.innerHTML = `<span class="swatch" style="background:${color[u]}"></span>${u}`;
-    b.onclick = () => { focus = focus === u ? null : u; draw(el, data); };
+    b.onclick = () => { picked.has(u) ? picked.delete(u) : picked.add(u); update(); };
     return b;
-  }));
+  });
+  reset.onclick = () => { picked.clear(); update(); };
+  legend.replaceChildren(...buttons, reset);
+  // Fade lines in place instead of redrawing, so the change is animated
+  function update() {
+    s.transition().duration(ms(300)).attr('opacity', d => op(d.u));
+    buttons.forEach((b, i) => b.setAttribute('aria-pressed', on(ROAD_USERS[i])));
+    reset.disabled = !picked.size;
+  }
+  buttons.forEach((b, i) => b.setAttribute('aria-pressed', on(ROAD_USERS[i])));
+  reset.disabled = !picked.size;
 }
