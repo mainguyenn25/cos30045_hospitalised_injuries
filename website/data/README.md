@@ -12,7 +12,7 @@ Every branch starts the same way: Excel Reader (sheet `raw`) → Row Filter (`Ca
 | `year_road_user.csv` | index lines | GroupBy `Calendar year`+`Road user`; Sum of Hospitalisations (no Pivot) | Calendar year, Road user, Hospitalisations |
 | `year_age.csv` | age change bars | GroupBy `Calendar year`+`Age group`; Sum of Hospitalisations (no Pivot) | Calendar year, Age group, Hospitalisations |
 | `remoteness.csv` | remoteness bars | GroupBy `ABS remoteness area`; Sum of the 4 measures → Math Formula `Days per case` → Math Formula `Died %` | ABS remoteness area, Count of cases, Died_cases, Hospitalisations, Bed days, Days per case, Died % |
-| `road_user_counterparty.csv` | "What they hit" (not built yet) | GroupBy `Road user`+`Counterparty` → Row Filter (car driver, motorcyclist, pedal cyclist, pedestrian) → Rule Engine (10 counterparties → 5 `What they hit` groups) → GroupBy → Joiner with per-road-user totals → Math Formula `Cases %`, `Deaths %` | Road user, What they hit, Count of cases, Died_cases, Sum(Count of cases), Sum(Died_cases), Cases %, Deaths % |
+| `road_user_counterparty.csv` | "What they hit" | GroupBy `Road user`+`Counterparty` → Row Filter (car driver, motorcyclist, pedal cyclist, pedestrian) → Rule Engine (10 counterparties → 5 `What they hit` groups) → GroupBy → Joiner with per-road-user totals → Math Formula `Cases %`, `Deaths %` | Road user, What they hit, Count of cases, Died_cases, Sum(Count of cases), Sum(Died_cases), Cases %, Deaths % |
 
 The 4 measures are `Count of cases`, `Died_cases`, `Hospitalisations` and `Bed days`. In CSV Writer, write the column header and leave out row IDs.
 
